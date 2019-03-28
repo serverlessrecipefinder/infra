@@ -1,0 +1,5 @@
+bucket = "recipefinder-tfstate"
+dynamodb_table = "recipefinder-tfstate"
+key = "terraform_setup.tfstate"
+profile = "default"
+region = "eu-west-2"
