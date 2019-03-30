@@ -6,14 +6,19 @@ locals {
     Environment = "dev"
   }
 }
+
+terraform {
+  backend "s3" {
+    key = "terraform_globals.tfstate"
+  }
+}
+
 provider "aws" {
   region = "eu-west-2"
 }
-module "common" {
-  source = "../../common"
-}
+
 module "pipeline" {
-  source="../../modules/pipeline"
+  source="../modules/pipeline"
   tags = "${local.tags}"
   prefix = "${local.project}"
   github_org = "serverlessrecipefinder"

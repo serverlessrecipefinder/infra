@@ -1,12 +1,12 @@
-resource "aws_s3_bucket" "foo" {
-  bucket = "${var.prefix}-bucket-test"
+resource "aws_s3_bucket" "artefacts" {
+  bucket = "${var.prefix}-artefacts"
   acl    = "private"
-  
   tags = "${var.tags}"
 }
 
-resource "aws_iam_role" "foo" {
-  name = "${var.prefix}-test-role"
+resource "aws_iam_role" "role" {
+  name = "${var.prefix}-role"
+  tags = "${var.tags}"
 
   assume_role_policy = <<EOF
 {
@@ -26,7 +26,7 @@ EOF
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
   name = "${var.prefix}-codepipeline_policy"
-  role = "${aws_iam_role.foo.id}"
+  role = "${aws_iam_role.role.id}"
 
   policy = <<EOF
 {
@@ -36,12 +36,11 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
       "Effect":"Allow",
       "Action": [
         "s3:GetObject",
-        "s3:GetObjectVersion",
-        "s3:GetBucketVersioning"
+        "s3:PutObject"
       ],
       "Resource": [
-        "${aws_s3_bucket.foo.arn}",
-        "${aws_s3_bucket.foo.arn}/*"
+        "${aws_s3_bucket.artefacts.arn}",
+        "${aws_s3_bucket.artefacts.arn}/*"
       ]
     },
     {
@@ -57,12 +56,12 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
 EOF
 }
 
-resource "aws_codepipeline" "foo" {
-  name     = "${var.prefix}-tf-test-pipeline"
-  role_arn = "${aws_iam_role.foo.arn}"
+resource "aws_codepipeline" "terraform" {
+  name     = "${var.prefix}-terraform-pipeline"
+  role_arn = "${aws_iam_role.role.arn}"
 
   artifact_store {
-    location = "${aws_s3_bucket.foo.bucket}"
+    location = "${aws_s3_bucket.artefacts.bucket}"
     type     = "S3"
   }
 
