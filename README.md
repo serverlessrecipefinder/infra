@@ -19,3 +19,9 @@ The bootstrap assumes this is being created into a completely fresh environment 
 terraform init -backend-config=backend.tfvars globals
 terraform apply -auto-approve -var "github_oauth_token=$OAUTH_TOKEN"
 ```
+
+## Layout
+
+* *setup/* - Module for initial project setup. Ran once at project initialisation.
+* *globals/* - Module for global project configuration - resources that are independant of the application environment.
+* *environment* - The application environment.
