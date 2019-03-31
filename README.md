@@ -9,7 +9,9 @@ The bootstrap assumes this is being created into a completely fresh environment 
 
 2. Create a GitHub personal token to use in the pipeline. (Not a long term solution.)
 
-3. Create the Terraform CD pipeline, passing in the token as an input.
+3. Ensure this project is pushed to the target repository.
+
+4. Create the Terraform CD pipeline, passing in the token as an input.
 ```
 cd globals &&
 terraform init -backend-config=../backend.tfvars

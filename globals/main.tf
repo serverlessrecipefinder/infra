@@ -7,14 +7,14 @@ locals {
   }
 }
 
+provider "aws" {
+  region = "${local.region}"
+}
+
 terraform {
   backend "s3" {
     key = "terraform_globals.tfstate"
   }
-}
-
-provider "aws" {
-  region = "eu-west-2"
 }
 
 module "pipeline" {

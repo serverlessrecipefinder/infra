@@ -74,7 +74,7 @@ resource "aws_codepipeline" "terraform" {
       owner            = "ThirdParty"
       provider         = "GitHub"
       version          = "1"
-      output_artifacts = ["test"]
+      output_artifacts = ["terraform_project"]
 
       configuration = {
         Owner                = "${var.github_org}"
@@ -82,23 +82,24 @@ resource "aws_codepipeline" "terraform" {
         PollForSourceChanges = "true"
         Branch               = "${var.branch}"
         OAuthToken           = "${var.github_oauth_token}"
+        PollForSourceChanges = "true"
       }
     }
   }
 
   stage {
-    name = "Build"
+    name = "Terraform Apply"
 
     action {
       name            = "Build"
       category        = "Build"
       owner           = "AWS"
       provider        = "CodeBuild"
-      input_artifacts = ["test"]
+      input_artifacts = ["terraform_project"]
       version         = "1"
 
       configuration = {
-        ProjectName = "test"
+        ProjectName = "${aws_codebuild_project.codebuild_invoke_terraform.name}"
       }
     }
   }
