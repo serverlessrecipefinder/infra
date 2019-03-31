@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "artefacts" {
-  bucket = "${var.prefix}-artefacts"
+  bucket = "${var.prefix}-artefact-bucket"
   acl    = "private"
   tags = "${var.tags}"
 }
@@ -88,7 +88,7 @@ resource "aws_codepipeline" "terraform" {
   }
 
   stage {
-    name = "Terraform Apply"
+    name = "Terraform-Apply"
 
     action {
       name            = "Build"

@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "terraform_state" {
-  bucket = "recipefinder-tfstate"
+  bucket = "${var.bucket}"
 
   versioning {
     enabled = true
@@ -8,10 +8,11 @@ resource "aws_s3_bucket" "terraform_state" {
   lifecycle {
     prevent_destroy = false
   }
+  
 }
 
 resource "aws_dynamodb_table" "terraform_state_lock" {
-  name           = "recipefinder-tfstate"
+  name           = "${var.dynamodb_table}"
   hash_key       = "LockID"
   billing_mode   = "PAY_PER_REQUEST"
 

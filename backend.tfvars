@@ -1,4 +1,3 @@
-bucket = "recipefinder-tfstate"
-dynamodb_table = "recipefinder-tfstate"
-profile = "default"
+bucket = "recipefinder-state"
+dynamodb_table = "recipefinder-state"
 region = "eu-west-2"

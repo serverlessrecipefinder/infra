@@ -9,5 +9,5 @@ phases:
   build:
     commands:
       - terraform init -backend-config=backend.tfvars environment
-      - terraform plan environment -out plan.tf
+      - terraform plan -out plan.tf environment 
       - terraform apply -auto-approve plan.tf
