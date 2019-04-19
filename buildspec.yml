@@ -12,10 +12,15 @@ phases:
       - echo "${TerragruntSha256} terragrunt" | sha256sum -c --quiet
       - chmod +x terragrunt
       - mv terragrunt /usr/bin
+  pre_build:
+    commands:
   build:
     commands:
       - cd ${CODEBUILD_SRC_DIR}/environment
-      - ls -la
+      # Create and switch to workspace for target environment
+      - terragrunt workspace new ${Environment} || true # Continue if exit code indicates workspace exists already.
+      - terragrunt workspace select ${Environment}
+      # Apply the changes
       - terragrunt init
       - terragrunt plan -out plan.tf
       - terragrunt apply -auto-approve plan.tf

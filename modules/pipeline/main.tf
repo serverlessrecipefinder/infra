@@ -88,7 +88,7 @@ resource "aws_codepipeline" "terraform" {
   }
 
   stage {
-    name = "Terraform-Apply"
+    name = "Terraform-Apply-Staging"
 
     action {
       name            = "Build"
@@ -99,7 +99,36 @@ resource "aws_codepipeline" "terraform" {
       version         = "1"
 
       configuration = {
-        ProjectName = "${aws_codebuild_project.codebuild_invoke_terraform.name}"
+        ProjectName = "${aws_codebuild_project.codebuild_invoke_terraform_staging.name}"
+      }
+    }
+  }
+
+  stage {
+    name = "Terraform-Production-Aproval"
+
+    action {
+      name = "Approve"
+      category = "Approval"
+      owner = "AWS"
+      provider = "Manual"
+      version = "1"
+    }
+  }
+
+  stage {
+    name = "Terraform-Apply-Production"
+
+    action {
+      name            = "Build"
+      category        = "Build"
+      owner           = "AWS"
+      provider        = "CodeBuild"
+      input_artifacts = ["terraform_project"]
+      version         = "1"
+
+      configuration = {
+        ProjectName = "${aws_codebuild_project.codebuild_invoke_terraform_production.name}"
       }
     }
   }
