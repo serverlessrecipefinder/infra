@@ -1,11 +1,11 @@
 resource "aws_s3_bucket" "artefacts" {
-  bucket = "${var.prefix}-artefact-bucket"
+  bucket = "recipe-finder-artefact-bucket"
   acl    = "private"
   tags = "${var.tags}"
 }
 
 resource "aws_iam_role" "role" {
-  name = "${var.prefix}-role"
+  name = "recipe-finder-role"
   tags = "${var.tags}"
 
   assume_role_policy = <<EOF
@@ -25,7 +25,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
-  name = "${var.prefix}-codepipeline_policy"
+  name = "recipe-finder-codepipeline_policy"
   role = "${aws_iam_role.role.id}"
 
   policy = <<EOF
@@ -57,7 +57,7 @@ EOF
 }
 
 resource "aws_codepipeline" "terraform" {
-  name     = "${var.prefix}-terraform-pipeline"
+  name     = "recipe-finder-terraform-pipeline"
   role_arn = "${aws_iam_role.role.arn}"
 
   artifact_store {

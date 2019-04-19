@@ -1,27 +1,25 @@
 # Infrastructure
 
+## Prerequisites
+
+- Terraform
+- Terragrunt
+
 ## Bootstrap
 
-The bootstrap assumes this is being created into a completely fresh environment with no prior existing resources or backend.
+Terragrunt handles the creation of the backend if it doesn't already exist. This will be created **if necessary** when running the `init` command.
 
-1. Set your AWS profile if credentials aren't default. e.g.
-`AWS_PROFILE=recipefinder`
+The infrastructure is managed via AWS CodePipeline, and the initial pipeline is created by creating the globals module.
 
-2. Create the backend s3 bucket and lock table.
-`./setup.sh`
+You will be prompted to provide an OAuth token for Github via the command line for this step.
 
-3. Create a GitHub personal token to use in the pipeline. (Not a long term solution.)
-
-4. Ensure this project is pushed to the target repository.
-
-5. Create the Terraform CD pipeline, passing in the token as an input.
 ```
-terraform init -backend-config=backend.tfvars globals
-terraform apply -auto-approve -var "github_oauth_token=$OAUTH_TOKEN"
+cd pipeline/
+terraform plan
+terraform apply
 ```
 
 ## Layout
 
-* *setup/* - Module for initial project setup. Ran once at project initialisation.
-* *globals/* - Module for global project configuration - resources that are independant of the application environment.
+* *pipeline/* - Module for infrastructure pipeline. This is ran manually to bootstrap the project.
 * *environment* - The application environment.

@@ -1,16 +1,14 @@
 terraform {
-  backend "s3" {
-    key = "terraform_env.tfstate"
-  }
+  backend "s3" {}
 }
 
-resource "aws_dynamodb_table" "example-table" {
-  name           = "my-example-table"
-  hash_key       = "LockID"
-  billing_mode   = "PAY_PER_REQUEST"
+provider "aws" {
+  region = "${var.aws_region}"
+}
 
-  attribute {
-    name = "LockID"
-    type = "S"
-  }
+module "test" {
+  source = "../modules/vpc"
+  
+  cidr = "10.0.0.0/24"
+  tags = "${var.tags}"
 }

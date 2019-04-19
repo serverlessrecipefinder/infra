@@ -1,7 +1,3 @@
-variable "prefix" {
-  type        = "string"
-  description = "Prefix to apply to all resources"
-}
 variable "tags" {
   type        = "map"
   description = "Tags to apply to all resources in the module"
