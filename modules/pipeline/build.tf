@@ -56,15 +56,24 @@ resource "aws_codebuild_project" "codebuild_invoke_terraform" {
     privileged_mode = true
 
     environment_variable {
-        name = "TerraformVersion"
-        value = "0.11.13"
+      name = "TerraformVersion"
+      value = "0.11.13"
     }
 
     environment_variable {
-        name = "TerraformSha256"
-        value = "5925cd4d81e7d8f42a0054df2aafd66e2ab7408dbed2bd748f0022cfe592f8d2"
+      name = "TerraformSha256"
+      value = "5925cd4d81e7d8f42a0054df2aafd66e2ab7408dbed2bd748f0022cfe592f8d2"
     }
 
+    environment_variable {
+      name = "TerragruntVersion"
+      value = "v0.18.3"
+    }
+
+    environment_variable {
+      name = "TerragruntSha256"
+      value = "c6693de640f1195788cfed15d524f5347e869967b56a58a7689c7e29b1264883"
+    }
   }
 
   source {

@@ -1,13 +1,21 @@
-version: 0.1
+version: 0.2
 phases:
   install:
     commands:
+      # Install terraform
       - cd /tmp
       - curl -o terraform.zip https://releases.hashicorp.com/terraform/${TerraformVersion}/terraform_${TerraformVersion}_linux_amd64.zip
       - echo "${TerraformSha256} terraform.zip" | sha256sum -c --quiet
       - unzip terraform.zip && mv terraform /usr/bin
+      # Install terragrunt
+      - curl -Lo terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/${TerragruntVersion}/terragrunt_linux_amd64
+      - echo "${TerragruntSha256} terragrunt" | sha256sum -c --quiet
+      - chmod +x terragrunt
+      - mv terragrunt /usr/bin
   build:
     commands:
-      - terraform init -backend-config=backend.tfvars environment
-      - terraform plan -out plan.tf environment 
-      - terraform apply -auto-approve plan.tf
+      - cd ${CODEBUILD_SRC_DIR}/environment
+      - ls -la
+      - terragrunt init
+      - terragrunt plan -out plan.tf
+      - terragrunt apply -auto-approve plan.tf
