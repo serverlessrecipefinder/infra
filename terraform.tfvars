@@ -28,7 +28,8 @@ terragrunt = {
         "plan",
         "import",
         "push",
-        "refresh"
+        "refresh",
+        "destroy"
       ]
 
       required_var_files = [

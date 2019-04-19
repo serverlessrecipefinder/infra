@@ -15,6 +15,7 @@ You will be prompted to provide an OAuth token for Github via the command line f
 
 ```
 cd pipeline/
+terraform init --terragrunt-non-interactive
 terraform plan
 terraform apply
 ```
