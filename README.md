@@ -27,4 +27,4 @@ terraform apply
 
 # Local Setup
 
-Add a profile `[recipefinder]` with your credentials to `~/.aws/credentials`. Terragrunt has been hard coded to use this profile.
+Set `export AWS_PROFILE=<profile_name>` to select a specific profile.
