@@ -24,3 +24,7 @@ terraform apply
 
 * *live/* - Configuration files for various environments.
 * *modules/* - Terraform modules.
+
+# Local Setup
+
+Add a profile `[recipefinder]` with your credentials to `~/.aws/credentials`. Terragrunt has been hard coded to use this profile.

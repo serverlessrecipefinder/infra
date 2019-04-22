@@ -7,6 +7,7 @@ terragrunt = {
       region         = "eu-west-2"
       encrypt        = true
       dynamodb_table = "recipe-finder-tf-lock"
+      profile        = "recipefinder"
 
       s3_bucket_tags {
         Project = "recipe-finder"
