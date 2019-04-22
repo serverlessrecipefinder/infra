@@ -130,7 +130,7 @@ resource "aws_codebuild_project" "codebuild_invoke_terraform_production" {
 
     environment_variable {
       name = "Environment"
-      value = "production"
+      value = "prod"
     }
   }
 

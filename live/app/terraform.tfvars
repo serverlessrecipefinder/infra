@@ -23,27 +23,12 @@ terragrunt = {
 
   terraform {
     extra_arguments "conditional_vars" {
-      commands = [
-        "apply",
-        "plan",
-        "import",
-        "push",
-        "refresh",
-        "destroy"
-      ]
+      commands  = ["${get_terraform_commands_that_need_locking()}"]
 
       required_var_files = [
-        "${get_parent_tfvars_dir()}/terraform.tfvars"
+        "${get_tfvars_dir()}/${find_in_parent_folders("app.tfvars")}",
+        "${get_tfvars_dir()}/env.tfvars"
       ]
     }
   }
-}
-
-# Above Terragrunt confugration passes this same file as --var-file to all commands. The result is that
-# all variables defined in this file are available in any child module that imports the above Terragrunt
-# configuration.
-aws_region = "eu-west-2"
-tags = {
-    Project = "recipe-finder"
-    Environment = "dev"
 }

@@ -14,7 +14,7 @@ The infrastructure is managed via AWS CodePipeline, and the initial pipeline is 
 You will be prompted to provide an OAuth token for Github via the command line for this step.
 
 ```
-cd pipeline/
+cd live/boostrap/
 terraform init --terragrunt-non-interactive
 terraform plan
 terraform apply
@@ -22,5 +22,5 @@ terraform apply
 
 ## Layout
 
-* *pipeline/* - Module for infrastructure pipeline. This is ran manually to bootstrap the project.
-* *environment* - The application environment.
+* *live/* - Configuration files for various environments.
+* *modules/* - Terraform modules.
