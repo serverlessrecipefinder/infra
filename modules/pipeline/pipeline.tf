@@ -1,9 +1,9 @@
-resource "aws_codepipeline" "terraform_app" {
+resource "aws_codepipeline" "pipeline" {
   name     = "rf-codepipeline-${var.name}"
-  role_arn = "${aws_iam_role.role.arn}"
+  role_arn = "${aws_iam_role.codepipeline_role.arn}"
 
   artifact_store {
-    location = "${aws_s3_bucket.artefacts.bucket}"
+    location = "${var.artefact_bucket_name}"
     type     = "S3"
   }
 
@@ -41,7 +41,7 @@ resource "aws_codepipeline" "terraform_app" {
       version         = "1"
 
       configuration = {
-        ProjectName = "${var.codebuild_terraform_app_staging}"
+        ProjectName = "${var.buildcode_target_staging}"
       }
     }
   }
@@ -70,7 +70,7 @@ resource "aws_codepipeline" "terraform_app" {
       version         = "1"
 
       configuration = {
-        ProjectName = "${var.codebuild_terraform_app_production}"
+        ProjectName = "${var.buildcode_target_production}"
       }
     }
   }

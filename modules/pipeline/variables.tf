@@ -26,6 +26,15 @@ variable "branch" {
   description = "The branch to checkout from"
   default = "master"
 }
+variable "artefact_bucket_name" {
+  type        = "string"
+  description = "The name of bucket to store artefacts into"
+}
+
+variable "artefact_bucket_arn" {
+  type        = "string"
+  description = "The ARN of bucket to store artefacts into"
+}
 
 variable "buildcode_target_staging" {
   type        = "string"

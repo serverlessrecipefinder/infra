@@ -1,6 +1,56 @@
+resource "aws_iam_role" "codepipeline_role" {
+  name = "rf-codepipeline-role-globals"
+  tags = "${var.tags}"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "codepipeline.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+resource "aws_iam_role_policy" "codepipeline_policy" {
+  name = "rf-codepipeline-policy-globals"
+  role = "${aws_iam_role.codepipeline_role.id}"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect":"Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "${aws_s3_bucket.artefacts.arn}",
+        "${aws_s3_bucket.artefacts.arn}/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "codebuild:BatchGetBuilds",
+        "codebuild:StartBuild"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
 resource "aws_codepipeline" "terraform_globals" {
   name     = "rf-codepipeline-globals"
-  role_arn = "${aws_iam_role.role.arn}"
+  role_arn = "${aws_iam_role.codepipeline_role.arn}"
 
   artifact_store {
     location = "${aws_s3_bucket.artefacts.bucket}"

@@ -1,81 +1,17 @@
-resource "aws_codepipeline" "terraform_app" {
-  name     = "rf-codepipeline-app"
-  role_arn = "${aws_iam_role.role.arn}"
 
-  artifact_store {
-    location = "${aws_s3_bucket.artefacts.bucket}"
-    type     = "S3"
-  }
-
-  stage {
-    name = "Source"
-
-    action {
-      name             = "Source"
-      category         = "Source"
-      owner            = "ThirdParty"
-      provider         = "GitHub"
-      version          = "1"
-      output_artifacts = ["terraform_project"]
-
-      configuration = {
-        Owner                = "${var.github_org}"
-        Repo                 = "${var.repo}"
-        PollForSourceChanges = "true"
-        Branch               = "${var.branch}"
-        OAuthToken           = "${data.aws_ssm_parameter.github_oauth_token.value}"
-        PollForSourceChanges = "true"
-      }
-    }
-  }
-
-  stage {
-    name = "Apply-Staging"
-
-    action {
-      name            = "Build"
-      category        = "Build"
-      owner           = "AWS"
-      provider        = "CodeBuild"
-      input_artifacts = ["terraform_project"]
-      version         = "1"
-
-      configuration = {
-        ProjectName = "${aws_codebuild_project.codebuild_terraform_app_staging.name}"
-      }
-    }
-  }
-
-  stage {
-    name = "Production-Aproval"
-
-    action {
-      name = "Approve"
-      category = "Approval"
-      owner = "AWS"
-      provider = "Manual"
-      version = "1"
-    }
-  }
-
-  stage {
-    name = "Apply-Production"
-
-    action {
-      name            = "Build"
-      category        = "Build"
-      owner           = "AWS"
-      provider        = "CodeBuild"
-      input_artifacts = ["terraform_project"]
-      version         = "1"
-
-      configuration = {
-        ProjectName = "${aws_codebuild_project.codebuild_terraform_app_production.name}"
-      }
-    }
-  }
+module "pipeline-app" {
+  source = "../pipeline"
+  name = "infra-app"
+  aws_region = "${var.aws_region}"
+  tags = "${var.tags}"
+  github_org = "${var.github_org}"
+  repo = "infra"
+  branch = "master"
+  artefact_bucket_name = "${aws_s3_bucket.artefacts.bucket}"
+  artefact_bucket_arn = "${aws_s3_bucket.artefacts.arn}"
+  buildcode_target_staging = "${aws_codebuild_project.codebuild_terraform_app_staging.name}"
+  buildcode_target_production = "${aws_codebuild_project.codebuild_terraform_app_production.name}"
 }
-
 resource "aws_codebuild_project" "codebuild_terraform_app_staging" {
   name          = "rf-codebuild-app-staging"
   description   = "Apply terraform for environment module"

@@ -1,4 +1,4 @@
-resource "aws_iam_role" "role" {
+resource "aws_iam_role" "codepipeline_role" {
   name = "rf-codepipeline-role-${var.name}"
   tags = "${var.tags}"
 
@@ -17,21 +17,32 @@ resource "aws_iam_role" "role" {
 }
 EOF
 }
+resource "aws_iam_role_policy" "codepipeline_policy" {
+  name = "rf-codepipeline-policy-${var.name}"
+  role = "${aws_iam_role.codepipeline_role.id}"
 
-resource "aws_iam_role" "iam_code_build_role" {
-  name = "rf-codebuild-role-${var.name}"
-  permissions_boundary = ""
-  assume_role_policy = <<EOF
+  policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "codebuild.amazonaws.com"
-      },
+      "Effect":"Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "${var.artefact_bucket_arn}",
+        "${var.artefact_bucket_arn}/*"
+      ]
+    },
+    {
       "Effect": "Allow",
-      "Sid": ""
+      "Action": [
+        "codebuild:BatchGetBuilds",
+        "codebuild:StartBuild"
+      ],
+      "Resource": "*"
     }
   ]
 }
