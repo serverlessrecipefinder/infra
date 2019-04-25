@@ -21,6 +21,21 @@ terragrunt apply
 ```
 This will create an OAuth SSM token used in the later pipeline stages.
 
+2) Run the globals module to create the global resources. This creates code pipeline resources that will build this module on changes to this repository.
+
+```
+cd live/globals/
+terragrunt init --terragrunt-non-interactive
+terragrunt plan
+terragrunt apply
+```
+
+Changes to globals should now be made by merging to master.
+
+## Local Development
+
+TODO: Workspaces.
+
 ## Layout
 
 * *live/* - Configuration files for various environments.

@@ -17,12 +17,8 @@ variable "repo" {
   description = "The github repository acting as a source"
 }
 
-variable "github_oauth_token" {
-  type        = "string"
-  description = "An OAuth token providing Github access"
-}
-
 variable "branch" {
   type        = "string"
   description = "The branch to checkout from"
+  default = "master"
 }

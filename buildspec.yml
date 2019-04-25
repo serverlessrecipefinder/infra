@@ -16,8 +16,8 @@ phases:
     commands:
       # Used by terragrunt config files to determin env vars.
       - SR_TF_ENV=${Environment}
-      # Deploy application modules.
-      - cd ${CODEBUILD_SRC_DIR}/live/app
+      # Deploy module from env var.
+      - cd ${CODEBUILD_SRC_DIR}/live/${TfTargetDir}
       # Select environment workspaces.
       - terragrunt workspace new ${Environment} || true
       - terragrunt workspace select ${Environment}
