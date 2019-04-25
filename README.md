@@ -11,7 +11,7 @@ Terragrunt handles the creation of the backend if it doesn't already exist. This
 
 The infrastructure is managed via AWS CodePipeline, and the initial pipeline is created by creating the globals module.
 
-You will be prompted to provide an OAuth token for Github via the command line for this step.
+1) Run the infrastructure bootstrap. You will be prompted to provide an OAuth token for Github via the command line for this step.
 
 ```
 cd live/boostrap/
@@ -19,8 +19,7 @@ terragrunt init --terragrunt-non-interactive
 terragrunt plan
 terragrunt apply
 ```
-
-This will deploy a CodePipeline that will execute the rest of the Terraform as part of a pipeline.
+This will create an OAuth SSM token used in the later pipeline stages.
 
 ## Layout
 

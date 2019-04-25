@@ -5,7 +5,7 @@ terragrunt = {
 
   terraform {
 
-        source = "../../modules//bootstrap"
+        source = "../../modules//pipeline"
     extra_arguments "conditional_vars" {
       commands  = ["${get_terraform_commands_that_need_locking()}"]
 
