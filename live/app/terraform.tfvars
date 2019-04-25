@@ -2,32 +2,19 @@
 
 # Common Terragrunt configuration.
 terragrunt = {
-  remote_state {
-    backend = "s3"
-    config {
-      bucket         = "recipe-finder-tf-state"
-      key            = "${path_relative_to_include()}/terraform.tfstate"
-      region         = "eu-west-2"
-      encrypt        = true
-      dynamodb_table = "recipe-finder-tf-lock"
-
-      s3_bucket_tags {
-        Project = "recipe-finder"
-      }
-
-      dynamodb_table_tags {
-        Project = "recipe-finder"
-      }
-    }
+  include {
+    path = "${find_in_parent_folders()}"
   }
 
   terraform {
+    source = "../../modules//app"
+
     extra_arguments "conditional_vars" {
       commands  = ["${get_terraform_commands_that_need_locking()}"]
 
       required_var_files = [
-        "${get_tfvars_dir()}/${find_in_parent_folders("app.tfvars")}",
-        "${get_tfvars_dir()}/env.tfvars"
+        "${get_tfvars_dir()}/app.tfvars",
+        "${get_tfvars_dir()}/${get_env("RF_TF_ENV", "staging")}.tfvars"
       ]
     }
   }

@@ -15,10 +15,12 @@ You will be prompted to provide an OAuth token for Github via the command line f
 
 ```
 cd live/boostrap/
-terraform init --terragrunt-non-interactive
-terraform plan
-terraform apply
+terragrunt init --terragrunt-non-interactive
+terragrunt plan
+terragrunt apply
 ```
+
+This will deploy a CodePipeline that will execute the rest of the Terraform as part of a pipeline.
 
 ## Layout
 

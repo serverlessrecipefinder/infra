@@ -12,11 +12,16 @@ phases:
       - echo "${TerragruntSha256} terragrunt" | sha256sum -c --quiet
       - chmod +x terragrunt
       - mv terragrunt /usr/bin
-  pre_build:
-    commands:
   build:
     commands:
-      - cd ${CODEBUILD_SRC_DIR}/live/app/${Environment}
+      # Used by terragrunt config files to determin env vars.
+      - SR_TF_ENV=${Environment}
+      # Deploy application modules.
+      - cd ${CODEBUILD_SRC_DIR}/live/app
+      # Select environment workspaces.
+      - terragrunt workspace new ${Environment} || true
+      - terragrunt workspace select ${Environment}
+      # Apply changes.
       - terragrunt init
       - terragrunt plan
       - terragrunt apply -auto-approve
