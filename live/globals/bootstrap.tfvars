@@ -4,3 +4,4 @@ tags = {
 }
 github_org = "serverlessrecipefinder"
 repo = "infra"
+prefix = "rf"
